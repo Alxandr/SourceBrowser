@@ -194,7 +194,6 @@ namespace Microsoft.SourceBrowser.HtmlGenerator
                 projectSourceFolder,
                 outputAssemblyPath);
         }
-
         public IEnumerable<string> GetAssemblyNames()
         {
             if (solution != null)
@@ -211,7 +210,10 @@ namespace Microsoft.SourceBrowser.HtmlGenerator
         {
             propertiesOpt = propertiesOpt ?? ImmutableDictionary<string, string>.Empty;
 
-            propertiesOpt = propertiesOpt.Add("AlwaysCompileMarkupFilesInSeparateDomain", "false");
+            propertiesOpt = propertiesOpt.AddRange([
+                new("AlwaysCompileMarkupFilesInSeparateDomain", "false"),
+                new("NuGetAudit", "false"),
+            ]);
 
             var w = MSBuildWorkspace.Create(properties: propertiesOpt);
             w.LoadMetadataForReferencedProjects = true;
