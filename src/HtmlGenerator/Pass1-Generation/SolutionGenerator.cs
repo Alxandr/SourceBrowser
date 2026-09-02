@@ -641,8 +641,9 @@ namespace Microsoft.SourceBrowser.HtmlGenerator
                 message = message + " Project: " + project.Name;
             }
 
-            Log.Exception("Workspace failed: " + message);
-            Log.Write(message, ConsoleColor.Red);
+            var isSevere = e.Diagnostic.Kind != WorkspaceDiagnosticKind.Warning;
+            Log.Exception("Workspace failed: " + message, isSevere);
+            Log.Write(message, isSevere ? ConsoleColor.Red : ConsoleColor.Yellow);
         }
 
         private static readonly string[] LoadableProjectExtensions = { ".csproj", ".vbproj" };
