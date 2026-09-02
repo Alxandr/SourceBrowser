@@ -211,7 +211,11 @@ namespace Microsoft.SourceBrowser.HtmlGenerator
         {
             propertiesOpt = propertiesOpt ?? ImmutableDictionary<string, string>.Empty;
 
-            propertiesOpt = propertiesOpt.Add("AlwaysCompileMarkupFilesInSeparateDomain", "false");
+            var initialNoWarn = propertiesOpt.TryGetValue("NoWarn", out var noWarn) ? noWarn : "";
+            propertiesOpt = propertiesOpt.SetItems([
+                new("AlwaysCompileMarkupFilesInSeparateDomain", "false"),
+                new("NoWarn", $"ASPIRE010;{initialNoWarn}")
+            ]);
 
             var w = MSBuildWorkspace.Create(properties: propertiesOpt);
             w.LoadMetadataForReferencedProjects = true;
